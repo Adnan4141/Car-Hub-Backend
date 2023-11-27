@@ -8,7 +8,7 @@ require("dotenv").config();
 
 app.use(express.json());
 app.use(cors());
-const uri = "mongodb+srv://NewCarHub:newcarhub@cluster0.mpobb6h.mongodb.net/?retryWrites=true&w=majority";
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.mpobb6h.mongodb.net/?retryWrites=true&w=majority`;
 
 const client = new MongoClient(uri, {
     serverApi: {
@@ -28,20 +28,18 @@ async function run() {
             console.log(vehicle)
             res.send(result);
         })
+        
         app.get('/all-vehicles', async (req, res) => {
-
             const result = await vehicleCollection.find().toArray();
             res.send(result);
 
         })
     }
-    
+
     finally {
     }
 }
 run().catch(console.dir);
-
-
 
 
 
