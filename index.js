@@ -22,12 +22,22 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         const vehicleCollection = client.db("rental-service").collection("vehicles");
+        const teamCollection = client.db("rental-service").collection("team")
         app.post('/add-a-vehicle', async (req, res) => {
             const vehicle = req.body;
             const result = await vehicleCollection.insertOne(vehicle);
             console.log(vehicle)
             res.send(result);
         })
+      //add teammate information
+        app.post('/add-teammate', async (req, res) => {
+            const teammate = req.body;
+            const result = await teamCollection.insertOne(teammate);
+            console.log(teammate)
+            res.send(result);
+        })
+
+
 
         app.get('/all-vehicles', async (req, res) => {
             const result = await vehicleCollection.find().toArray();
