@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require("cors");
 const app = express()
 const port = process.env.PORT || 3000;
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require("dotenv").config();
 
 
@@ -28,12 +28,34 @@ async function run() {
             console.log(vehicle)
             res.send(result);
         })
-        
+
         app.get('/all-vehicles', async (req, res) => {
             const result = await vehicleCollection.find().toArray();
             res.send(result);
 
         })
+        
+        //singleVehicle details
+        app.get('/vehicle/:id', async (req, res) => {
+            const id = req.params.id;
+            const result = await vehicleCollection.findOne({ _id: new ObjectId(id) })
+            res.send(result);
+        })
+
+        //update
+        app.put('/update-by-id/:id', async(req,res)=>{
+           const id= req.params.id;
+           const filter={_id: new ObjectId(id)};
+           const updateVehicle = req.body;
+           const updates = {$set:updateVehicle}
+
+           const result =await vehicleCollection.updateOne(filter,updates);
+           res.send(result);
+
+        })
+
+
+
     }
 
     finally {
