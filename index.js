@@ -34,7 +34,7 @@ async function run() {
             res.send(result);
 
         })
-        
+
         //singleVehicle details
         app.get('/vehicle/:id', async (req, res) => {
             const id = req.params.id;
@@ -43,17 +43,23 @@ async function run() {
         })
 
         //update
-        app.put('/update-by-id/:id', async(req,res)=>{
-           const id= req.params.id;
-           const filter={_id: new ObjectId(id)};
-           const updateVehicle = req.body;
-           const updates = {$set:updateVehicle}
+        app.put('/update-by-id/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) };
+            const updateVehicle = req.body;
+            const updates = { $set: updateVehicle }
 
-           const result =await vehicleCollection.updateOne(filter,updates);
-           res.send(result);
-
+            const result = await vehicleCollection.updateOne(filter, updates);
+            res.send(result);
         })
 
+        //Delect
+        app.delete('/delete-by-id/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = {_id: new ObjectId(id) };
+            const result = await vehicleCollection.deleteOne(filter);
+            res.send(result);
+        });
 
 
     }
