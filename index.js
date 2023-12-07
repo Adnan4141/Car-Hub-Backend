@@ -21,12 +21,12 @@ const client = new MongoClient(uri, {
 
 async function run() {
     try {
-        const vehicleCollection = client.db("rental-service").collection("vehicles");
-        const teamCollection = client.db("rental-service").collection("team")
-        app.post('/add-a-vehicle', async (req, res) => {
-            const vehicle = req.body;
-            const result = await vehicleCollection.insertOne(vehicle);
-            console.log(vehicle)
+        const productCollection = client.db("product-collection").collection("products");
+        const teamCollection = client.db("product-collection").collection("team")
+        app.post('/add-a-product', async (req, res) => {
+            const product = req.body;
+            const result = await productCollection.insertOne(product);
+            console.log(product)
             res.send(result);
         })
       //add teammate information
@@ -37,18 +37,27 @@ async function run() {
             res.send(result);
         })
 
-
-
-        app.get('/all-vehicles', async (req, res) => {
-            const result = await vehicleCollection.find().toArray();
+        //for teammatea get
+        app.get('/all-teammate', async (req, res) => {
+            const result = await teamCollection.find().toArray();
             res.send(result);
 
         })
 
-        //singleVehicle details
-        app.get('/vehicle/:id', async (req, res) => {
+
+
+
+       //for product
+        app.get('/all-products', async (req, res) => {
+            const result = await productCollection.find().toArray();
+            res.send(result);
+
+        })
+
+        //singleproduct details
+        app.get('/product/:id', async (req, res) => {
             const id = req.params.id;
-            const result = await vehicleCollection.findOne({ _id: new ObjectId(id) })
+            const result = await productCollection.findOne({ _id: new ObjectId(id) })
             res.send(result);
         })
 
@@ -56,10 +65,10 @@ async function run() {
         app.put('/update-by-id/:id', async (req, res) => {
             const id = req.params.id;
             const filter = { _id: new ObjectId(id) };
-            const updateVehicle = req.body;
-            const updates = { $set: updateVehicle }
+            const updateProduct = req.body;
+            const updates = { $set: updateProduct }
 
-            const result = await vehicleCollection.updateOne(filter, updates);
+            const result = await productCollection.updateOne(filter, updates);
             res.send(result);
         })
 
@@ -67,7 +76,7 @@ async function run() {
         app.delete('/delete-by-id/:id', async (req, res) => {
             const id = req.params.id;
             const filter = {_id: new ObjectId(id) };
-            const result = await vehicleCollection.deleteOne(filter);
+            const result = await productCollection.deleteOne(filter);
             res.send(result);
         });
 
